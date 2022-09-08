@@ -1,0 +1,25 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.card {
+  padding: 2em;
+}
+
+.card dl {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  line-height: 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1em;
+  margin: 0;
+  padding: 0;
+}
+
+.card dt {
+  font-weight: 600;
+}
