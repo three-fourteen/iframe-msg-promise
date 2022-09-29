@@ -1,4 +1,4 @@
-import { postMessagePromise } from "../../utilities"
+import { postMessagePromise } from "../../.."
 
 const GetBtn = ({ setData }: any) => {
   const sendGetRequest = () => {
@@ -10,7 +10,7 @@ const GetBtn = ({ setData }: any) => {
     // If exists, send a message to the iframe
     if (target) {
       // Generate a random ID number between 1 and 10 just to get different data
-      const ramdonID = Math.floor(Math.random() * 10)
+      const ramdonID = Math.floor(Math.random() * 10) + 1
       postMessagePromise({
         params: {
           url: "https://jsonplaceholder.typicode.com/users/" + ramdonID,

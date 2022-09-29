@@ -1,4 +1,10 @@
-import { PostMsgPromiseArgs } from "../types"
+type PostMsgPromiseArgs = {
+  params: any
+  win: Window
+  target: Window
+}
+
+export type { PostMsgPromiseArgs }
 
 /**
  * Post a message to an iframe with a promise
