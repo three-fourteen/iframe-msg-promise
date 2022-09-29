@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { startListening } from "../../.."
+import { startListening } from "../../lib"
 
 /**
  * This component simulates the content of an iframe

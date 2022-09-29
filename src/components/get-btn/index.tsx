@@ -1,4 +1,4 @@
-import { postMessagePromise } from "../../.."
+import { postMessagePromise } from "../../lib"
 
 const GetBtn = ({ setData }: any) => {
   const sendGetRequest = () => {
@@ -18,7 +18,7 @@ const GetBtn = ({ setData }: any) => {
         },
         win: window,
         target: target,
-      }).then((resp) => {
+      }).then((resp: any) => {
         setData(resp)
       })
     }
