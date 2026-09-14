@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from "vite"
 import { resolve } from "path"
 import react from "@vitejs/plugin-react"
@@ -8,8 +9,10 @@ export default defineConfig({
   plugins: [
     dts({
       entryRoot: resolve(__dirname, "src/lib"),
+      exclude: ["src/lib/__tests__/**"],
       insertTypesEntry: true,
     }),
+    // Only the demo app uses React; the library itself has no dependencies.
     react(),
   ],
   build: {
@@ -19,10 +22,9 @@ export default defineConfig({
       // the proper extensions will be added
       fileName: "index",
     },
-    rollupOptions: {
-      // make sure to externalize deps that shouldn't be bundled
-      // into your library
-      external: ["react"],
-    },
+  },
+  test: {
+    environment: "jsdom",
+    include: ["src/lib/__tests__/**/*.test.ts"],
   },
 })
