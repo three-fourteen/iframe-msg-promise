@@ -1,4 +1,4 @@
-import { IframeMessageError, toRemoteErrorInfo } from "./errors"
+import { IframeMessageError, toRemoteErrorInfo } from "./errors.js"
 import {
   createMessageId,
   isOpaqueOrigin,
@@ -8,11 +8,11 @@ import {
   originMatchesTarget,
   REQUEST_ACTION,
   RESPONSE_ACTION,
-} from "./protocol"
-import type { RequestEnvelope, ResponseEnvelope } from "./protocol"
+} from "./protocol.js"
+import type { RequestEnvelope, ResponseEnvelope } from "./protocol.js"
 
-export { IframeMessageError } from "./errors"
-export type { IframeMessageErrorCode, RemoteErrorInfo } from "./errors"
+export { IframeMessageError } from "./errors.js"
+export type { IframeMessageErrorCode, RemoteErrorInfo } from "./errors.js"
 export { REQUEST_ACTION, RESPONSE_ACTION }
 
 /** Default time to wait for a response before rejecting with `TIMEOUT`. */

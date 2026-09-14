@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import { startListening } from "../../lib"
+import { useState } from "react"
+import { useIframeListener } from "../../react"
 import type { User, UserRequest } from "../../types"
 
 /**
@@ -15,24 +15,18 @@ const ALLOWED_ORIGINS = [window.location.origin]
 const FrameContent = () => {
   const [param, setParam] = useState<UserRequest | null>(null)
 
-  useEffect(
-    () =>
-      // startListening returns its own unsubscribe, so it doubles as the effect
-      // cleanup: no duplicate listeners under StrictMode's double-invoke.
-      startListening<UserRequest, User>({
-        allowedOrigins: ALLOWED_ORIGINS,
-        handler: async (params) => {
-          setParam(params)
-          const response = await fetch(params.url, { method: params.method })
-          if (!response.ok) {
-            throw new Error(`Request failed with status ${response.status}`)
-          }
-          return response.json()
-        },
-        onError: (error) => console.error("[frame] handler failed", error),
-      }),
-    []
-  )
+  useIframeListener<UserRequest, User>({
+    allowedOrigins: ALLOWED_ORIGINS,
+    handler: async (params) => {
+      setParam(params)
+      const response = await fetch(params.url, { method: params.method })
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`)
+      }
+      return response.json()
+    },
+    onError: (error) => console.error("[frame] handler failed", error),
+  })
 
   return (
     <div>

@@ -28,6 +28,12 @@ failure path; both are fixed here. See "Migrating from 1.x" in the README.
 
 ### Added
 
+- **React hooks** at `iframe-msg-promise/react`: `useIframeMessage` (request
+  state, abort on unmount, stale answers from superseded requests dropped) and
+  `useIframeListener` (subscription tied to the component's lifetime, handler
+  read through a ref so an unmemoised closure neither re-subscribes nor goes
+  stale). `react` is an optional peer dependency; the core entry never imports
+  it.
 - `startListening` returns an unsubscribe function — usable directly as a React
   effect cleanup, which also fixes the duplicate listeners StrictMode produced.
 - Generics: `postMessagePromise<TRes, TReq>` and `startListening<TReq, TRes>`.
@@ -48,4 +54,12 @@ failure path; both are fixed here. See "Migrating from 1.x" in the README.
   `action: "iframeMsgPromise:response"`. Both frames must run 2.x.
 - The demo serves its frame as a real document (`/frame.html`) instead of
   portalling into an `about:blank` iframe, so it runs in its own realm like a
-  genuinely cross-domain widget.
+  genuinely cross-domain widget. It now uses the hooks.
+- **Relicensed to MIT** (from GPL-3.0-or-later), and the license text is now
+  actually shipped. Versions up to 1.0.10 remain under GPL-3.0-or-later.
+  Sole copyright holder, so no contributor consent was required.
+- Declarations are emitted by `tsc` rather than `vite-plugin-dts`, so types
+  resolve for both entries under `node`, `node16` and `nodenext`. Relative
+  imports carry explicit `.js` extensions, without which `node16` silently
+  degraded the package's types to `unknown`.
+- Added CI (GitHub Actions: typecheck, test and build on Node 18 and 20).

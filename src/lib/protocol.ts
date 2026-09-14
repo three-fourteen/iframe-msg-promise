@@ -1,4 +1,4 @@
-import type { RemoteErrorInfo } from "./errors"
+import type { RemoteErrorInfo } from "./errors.js"
 
 /** Discriminator carried by every request sent by this library. */
 export const REQUEST_ACTION = "iframeMsgPromise" as const

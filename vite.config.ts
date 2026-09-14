@@ -2,22 +2,17 @@
 import { defineConfig } from "vite"
 import { resolve } from "path"
 import react from "@vitejs/plugin-react"
-import dts from "vite-plugin-dts"
 
+// Library build for the core entry. Declarations for every entry are emitted
+// by `tsc -p tsconfig.build.json` so that cross-entry types resolve.
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    dts({
-      entryRoot: resolve(__dirname, "src/lib"),
-      exclude: ["src/lib/__tests__/**"],
-      insertTypesEntry: true,
-    }),
-    // Only the demo app uses React; the library itself has no dependencies.
-    react(),
-  ],
+  // Only the demo app uses React; the core library has no dependencies.
+  // Fast Refresh injects globals the test environment does not provide.
+  plugins: [react({ fastRefresh: !process.env.VITEST })],
   build: {
     lib: {
-      entry: resolve(__dirname, "index.ts"),
+      entry: resolve(__dirname, "src/lib/index.ts"),
       name: "iframeMsgPromise",
       // the proper extensions will be added
       fileName: "index",
@@ -25,6 +20,7 @@ export default defineConfig({
   },
   test: {
     environment: "jsdom",
-    include: ["src/lib/__tests__/**/*.test.ts"],
+    include: ["src/**/__tests__/**/*.test.{ts,tsx}"],
+    setupFiles: ["./vitest.setup.ts"],
   },
 })

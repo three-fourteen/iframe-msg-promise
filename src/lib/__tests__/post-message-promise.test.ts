@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { IframeMessageError, postMessagePromise } from ".."
-import { RESPONSE_ACTION } from "../protocol"
+import { IframeMessageError, postMessagePromise } from "../index.js"
+import { RESPONSE_ACTION } from "../protocol.js"
 
 const ORIGIN = "https://widget.example.com"
 

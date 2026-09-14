@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { startListening } from ".."
-import { REQUEST_ACTION } from "../protocol"
+import { startListening } from "../index.js"
+import { REQUEST_ACTION } from "../protocol.js"
 
 const APP_ORIGIN = "https://app.example.com"
 

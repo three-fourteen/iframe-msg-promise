@@ -39,6 +39,56 @@ const stop = startListening<Request, User>({
 
 ### With React
 
+The optional `iframe-msg-promise/react` entry ships two hooks. `react` is an
+optional peer dependency — the core entry never imports it.
+
+```tsx
+import { useIframeMessage, useIframeListener } from "iframe-msg-promise/react"
+```
+
+**In the app**, `useIframeMessage` wraps the request state. A request in flight
+is aborted when a new one starts and when the component unmounts, and a late
+answer from a superseded request is dropped, so the state always reflects the
+newest `send`:
+
+```tsx
+const iframeRef = useRef<HTMLIFrameElement>(null)
+const { send, data, error, loading } = useIframeMessage<User, Query>({
+  target: iframeRef,
+  targetOrigin: "https://widget.example.com",
+})
+
+return (
+  <>
+    <iframe ref={iframeRef} src="https://widget.example.com" />
+    <button onClick={() => send({ id: 1 }).catch(() => {})} disabled={loading}>
+      Load
+    </button>
+    {error && <p role="alert">{error.message}</p>}
+    {data && <p>{data.name}</p>}
+  </>
+)
+```
+
+`send` rejects as well as recording the failure in `error`, so a
+fire-and-forget call still needs a `.catch()`.
+
+**In the iframe**, `useIframeListener` subscribes for as long as the component
+is mounted:
+
+```tsx
+useIframeListener({
+  allowedOrigins: ["https://app.example.com"],
+  handler: async (params) => (await fetch(params.url)).json(),
+})
+```
+
+`handler` and `onError` are read through a ref, so they do not need to be
+memoised: passing a new closure every render neither re-subscribes nor leaves
+the handler looking at a stale render.
+
+### With React, without the hooks
+
 `startListening` returns its unsubscribe function, so it *is* the effect cleanup —
 which also makes it safe under StrictMode's double-invoke:
 
@@ -92,6 +142,20 @@ useEffect(() => {
 
 `context` is `{ origin, source }` — the already-allow-listed origin of the caller
 and the window the answer goes back to.
+
+### `useIframeMessage<TRes, TReq>(options)`
+
+From `iframe-msg-promise/react`. Takes `target` (a `Window`, an
+`HTMLIFrameElement`, or a ref to one — read at send time, so it may still be
+empty on first render), plus `targetOrigin`, `timeout` and `win` as above.
+
+Returns `{ send, data, error, loading, reset }`.
+
+### `useIframeListener<TReq, TRes>(options)`
+
+From `iframe-msg-promise/react`. Takes the same options as `startListening`,
+plus `enabled` (default `true`) to stop listening without unmounting. Returns
+nothing; the subscription follows the component's lifetime.
 
 ### `IframeMessageError`
 
@@ -157,10 +221,14 @@ message with parameters to that frame and gets an API response back.
 
 ```sh
 $ yarn
-$ yarn dev
-$ yarn test
+$ yarn dev      # demo at http://localhost:5173
+$ yarn test     # unit tests
+$ yarn build    # library bundles + type declarations
 ```
 
 ### License
 
-GNU General Public License v3.0 or later
+MIT — see [LICENSE](./LICENSE).
+
+Versions up to 1.0.10 were published under GPL-3.0-or-later; 2.0.0 onwards is
+MIT.
