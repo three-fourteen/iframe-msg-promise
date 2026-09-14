@@ -62,4 +62,10 @@ failure path; both are fixed here. See "Migrating from 1.x" in the README.
   resolve for both entries under `node`, `node16` and `nodenext`. Relative
   imports carry explicit `.js` extensions, without which `node16` silently
   degraded the package's types to `unknown`.
-- Added CI (GitHub Actions: typecheck, test and build on Node 18 and 20).
+- Added CI (GitHub Actions: typecheck, test and build on Node 22 and 24).
+- Upgraded the build toolchain: Vite 3 → 8, Vitest 0.34 → 5, TypeScript 4.6 → 7,
+  plus jsdom, Testing Library and the React plugin. Development now needs
+  Node 22+; the published package is unaffected. Vite's multi-entry library
+  mode lets both entries be built together, so the core is emitted once as a
+  shared chunk instead of being inlined into the React bundle — importing both
+  entries no longer ships two copies of it.

@@ -219,6 +219,9 @@ The demo serves the embedded frame as its own document (`/frame.html`) so it
 runs in its own realm, the way a genuinely cross-domain widget does. It sends a
 message with parameters to that frame and gets an API response back.
 
+Requires Node 22 or newer (the build toolchain's floor; the published package
+itself is dependency-free browser code).
+
 ```sh
 $ yarn
 $ yarn dev      # demo at http://localhost:5173

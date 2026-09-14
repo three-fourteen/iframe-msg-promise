@@ -14,14 +14,14 @@
     "typescript"
   ],
   "type": "module",
-  "main": "./dist/index.umd.cjs",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/types/lib/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/types/lib/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./react": {
       "types": "./dist/types/react/index.d.ts",
@@ -58,7 +58,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build && vite build -c vite.react.config.ts && tsc -p tsconfig.build.json",
+    "build": "tsc --noEmit && vite build && vite build -c vite.umd.config.ts && tsc -p tsconfig.build.json",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -73,16 +73,17 @@
     }
   },
   "devDependencies": {
-    "@testing-library/react": "^13.4.0",
-    "@types/node": "^18.7.18",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^26.5.1",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "@vitejs/plugin-react": "^2.1.0",
-    "jsdom": "^22.1.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "jsdom": "^30.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "typescript": "^4.6.4",
-    "vite": "^3.1.0",
-    "vitest": "^0.34.6"
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.0"
   }
 }
