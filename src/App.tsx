@@ -1,25 +1,26 @@
 import "./App.css"
 import { Frame, GetBtn } from "./components"
-import { useState } from "react"
-
-type User = {
-  id: number
-  name: string
-  username: string
-  email: string
-}
+import { useRef, useState } from "react"
+import type { User } from "./types"
 
 function App() {
   const [data, setData] = useState<User | null>(null)
+  const [frameReady, setFrameReady] = useState(false)
+  const frameRef = useRef<HTMLIFrameElement | null>(null)
+
   return (
     <div className="App">
       <h1>Iframe postMessage with promise example:</h1>
       <p>The idea is to simulate a cross-domain call between iframes.</p>
       <div className="card">
-        <GetBtn setData={setData} />
+        <GetBtn
+          frameRef={frameRef}
+          disabled={!frameReady}
+          setData={setData}
+        />
       </div>
 
-      <Frame />
+      <Frame iframeRef={frameRef} onReady={() => setFrameReady(true)} />
 
       {data && (
         <div className="card">

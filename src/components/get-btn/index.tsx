@@ -1,33 +1,49 @@
-import { postMessagePromise } from "../../lib"
+import { useIframeMessage } from "../../react"
+import type { User, UserRequest } from "../../types"
 
-const GetBtn = ({ setData }: any) => {
-  const sendGetRequest = () => {
-    // Get the target iframe
-    const target = (
-      document.getElementById("iframe-wrapper") as HTMLIFrameElement
-    )?.contentWindow
+type Props = {
+  frameRef: React.MutableRefObject<HTMLIFrameElement | null>
+  disabled?: boolean
+  setData: (user: User | null) => void
+}
 
-    // If exists, send a message to the iframe
-    if (target) {
-      // Generate a random ID number between 1 and 10 just to get different data
-      const ramdonID = Math.floor(Math.random() * 10) + 1
-      postMessagePromise({
-        params: {
-          url: "https://jsonplaceholder.typicode.com/users/" + ramdonID,
+const GetBtn = ({ frameRef, disabled, setData }: Props) => {
+  const { send, error, loading } = useIframeMessage<User, UserRequest>({
+    target: frameRef,
+    // The demo frame is served from the same origin; a real widget would take
+    // its own origin here, e.g. "https://widget.example.com".
+    targetOrigin: window.location.origin,
+    timeout: 10_000,
+  })
+
+  const sendGetRequest = async () => {
+    // Generate a random ID between 1 and 10 just to get different data
+    const randomID = Math.floor(Math.random() * 10) + 1
+    try {
+      setData(
+        await send({
+          url: `https://jsonplaceholder.typicode.com/users/${randomID}`,
           method: "GET",
-        },
-        win: window,
-        target: target,
-      }).then((resp: any) => {
-        setData(resp)
-      })
+        })
+      )
+    } catch {
+      // The hook already put the failure in `error`; just drop the stale row.
+      setData(null)
     }
   }
 
   return (
-    <button onClick={sendGetRequest} className="btn">
-      Get user data
-    </button>
+    <>
+      <button
+        onClick={sendGetRequest}
+        className="btn"
+        disabled={disabled || loading}
+      >
+        {loading ? "Loading…" : "Get user data"}
+      </button>
+      {error && <p role="alert">{error.message}</p>}
+    </>
   )
 }
+
 export default GetBtn
