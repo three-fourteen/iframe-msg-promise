@@ -225,7 +225,7 @@ itself is dependency-free browser code).
 ```sh
 $ yarn
 $ yarn dev      # demo at http://localhost:5173
-$ yarn test     # unit tests
+$ yarn test     # unit tests (also run against React 18 and 19 in CI)
 $ yarn build    # library bundles + type declarations
 ```
 
